@@ -5,8 +5,10 @@ def clean_text(text: str) -> str:
     """Removes extra whitespaces, emojis, and special symbols."""
     if not text:
         return ""
-    # Remove HTML if present
-    text = BeautifulSoup(text, "html.parser").get_text()
+    # Strip HTML only when the text actually contains tags (avoids the
+    # noisy "looks like a filename" warning on plain strings).
+    if "<" in text and ">" in text:
+        text = BeautifulSoup(text, "html.parser").get_text()
     # Remove special chars but keep basic punctuation
     text = re.sub(r'[^\w\s\-\.\(\)\/\,]', '', text)
     # Standardize whitespace

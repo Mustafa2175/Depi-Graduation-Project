@@ -1,0 +1,10 @@
+category_name,postings,hiring_companies,avg_salary_mid,remote_postings,demand_share_pct,postings_per_company,demand_rank
+Other,107,75,7659,0,70.86,1.43,1
+Backend Development,11,9,,2,7.28,1.22,2
+Full Stack Development,9,8,,0,5.96,1.13,3
+Mobile Development,7,6,,1,4.64,1.17,4
+Frontend Development,5,5,,0,3.31,1.00,5
+Project & Product Management,4,2,,0,2.65,2.00,6
+QA & Testing,4,4,,0,2.65,1.00,6
+IT Support & Networking,2,2,,0,1.32,1.00,8
+UI/UX Design,2,2,13125,0,1.32,1.00,8

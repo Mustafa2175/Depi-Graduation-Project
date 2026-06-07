@@ -1,0 +1,16 @@
+# Core runtime dependencies for the data pipeline (producers -> processing ->
+# warehouse). Pinned for reproducible installs across machines.
+# Canonical interpreter: Python 3.12 (see .python-version / Dockerfile).
+pandas==2.2.3
+psycopg2-binary==2.9.10
+SQLAlchemy==2.0.36
+beautifulsoup4==4.12.3
+requests==2.32.3
+lxml==5.3.0
+python-dotenv==1.0.1
+
+# NOTE: heavy, browser-based producers (selenium, undetected-chromedriver,
+# jobspy, webdriver-manager) are OPTIONAL and live in requirements-browser.txt.
+# They require a real Chrome/driver and are not needed to run the requests-based
+# producers (Wuzzuf, Forasna) or the processing -> warehouse -> dbt pipeline
+# and its tests.

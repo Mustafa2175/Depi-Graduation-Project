@@ -1,0 +1,10 @@
+skill_name,skill_category,category_name,postings,total_postings,overall_skill_rank
+.NET,framework,Backend Development,4,4,1
+Flutter,framework,Mobile Development,4,4,2
+Laravel,framework,Backend Development,3,3,3
+Oracle,db,Other,3,3,4
+Angular,framework,Frontend Development,2,2,5
+Java,language,Other,1,2,6
+Java,language,Frontend Development,1,2,6
+Python,language,Full Stack Development,1,2,8
+Python,language,Other,1,2,8

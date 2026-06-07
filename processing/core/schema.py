@@ -16,9 +16,15 @@ class JobSchema(TypedDict):
     salary_min: Optional[float]
     salary_max: Optional[float]
     salary_currency: Optional[str]
+    salary_period: Optional[str]   # hourly | daily | weekly | monthly | yearly
     experience_years_min: Optional[int]
     experience_years_max: Optional[int]
-    
+
+    # Enrichment (Phase 3 standardization)
+    skills: str             # pipe-delimited canonical skills, e.g. "Python|SQL|Airflow"
+    work_mode: str          # remote | hybrid | on-site
+    employment_type: str    # full-time | part-time | contract | internship | freelance
+
     # Metadata
     source: str             # wuzzuf, bayt, etc.
     job_url: str

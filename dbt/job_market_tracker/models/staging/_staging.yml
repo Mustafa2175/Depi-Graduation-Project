@@ -1,0 +1,114 @@
+version: 2
+
+models:
+  - name: stg_job_postings
+    description: "One clean row per job posting, with derived salary mid-point and seniority bucket."
+    columns:
+      - name: job_key
+        description: "Surrogate key of the posting."
+        data_tests: [unique, not_null]
+      - name: job_hash
+        description: "Deduplication business key."
+        data_tests: [unique, not_null]
+      - name: work_mode
+        description: "remote / hybrid / on-site."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['remote', 'hybrid', 'on-site']
+      - name: employment_type
+        description: "full-time / part-time / contract / internship / freelance."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['full-time', 'part-time', 'contract', 'internship', 'freelance']
+      - name: seniority
+        description: "Senior / Mid / Junior / Unspecified, parsed from the title."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['Senior', 'Mid', 'Junior', 'Unspecified']
+      - name: salary_mid
+        description: "Salary mid-point: average of min/max, or whichever bound is known."
+      - name: salary_currency
+        description: "Salary currency (EGP/USD)."
+      - name: salary_period
+        description: "Pay period parsed from the salary text: hourly/daily/weekly/monthly/yearly."
+      - name: company_key
+        description: "FK to stg_company."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_company')
+                field: company_key
+      - name: location_key
+        description: "FK to stg_location."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_location')
+                field: location_key
+      - name: category_key
+        description: "FK to stg_job_category."
+        data_tests:
+          - relationships:
+              arguments:
+                to: ref('stg_job_category')
+                field: category_key
+
+  - name: stg_company
+    description: "Company dimension (all SCD2 versions, keyed by company_key)."
+    columns:
+      - name: company_key
+        description: "Surrogate key for a company version."
+        data_tests: [unique, not_null]
+      - name: company_name
+        description: "Cleaned company name."
+        data_tests: [not_null]
+
+  - name: stg_location
+    description: "Location dimension: city + governorate + region."
+    columns:
+      - name: location_key
+        description: "Surrogate key for the location."
+        data_tests: [unique, not_null]
+      - name: governorate
+        description: "Egyptian governorate."
+        data_tests: [not_null]
+
+  - name: stg_skill
+    description: "Skill / technology dimension."
+    columns:
+      - name: skill_key
+        description: "Surrogate key for the skill."
+        data_tests: [unique, not_null]
+      - name: skill_name
+        description: "Canonical skill name."
+        data_tests: [unique, not_null]
+
+  - name: stg_job_category
+    description: "Job category dimension."
+    columns:
+      - name: category_key
+        description: "Surrogate key for the category."
+        data_tests: [unique, not_null]
+      - name: category_name
+        description: "Category name."
+        data_tests: [unique, not_null]
+
+  - name: stg_date
+    description: "Calendar date dimension."
+    columns:
+      - name: date_key
+        description: "Integer date key (YYYYMMDD)."
+        data_tests: [unique, not_null]
+
+  - name: stg_source
+    description: "Job board source dimension."
+    columns:
+      - name: source_key
+        description: "Surrogate key for the source."
+        data_tests: [unique, not_null]
+      - name: source_name
+        description: "Source identifier (wuzzuf, bayt, ...)."
+        data_tests: [unique, not_null]

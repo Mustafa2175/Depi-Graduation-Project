@@ -1,0 +1,16 @@
+# dbt connection profile. Reads the SAME PG* environment variables as the
+# Python loader (warehouse/config.py), so there is a single source of truth
+# and nothing is hardcoded. Defaults match .env.example.
+job_market_tracker:
+  target: dev
+  outputs:
+    dev:
+      type: postgres
+      host: "{{ env_var('PGHOST', 'localhost') }}"
+      port: "{{ (env_var('PGPORT', '5432')) | int }}"
+      user: "{{ env_var('PGUSER', 'jobmarket') }}"
+      password: "{{ env_var('PGPASSWORD', 'jobmarket') }}"
+      dbname: "{{ env_var('PGDATABASE', 'job_market_tracker') }}"
+      schema: analytics
+      threads: 4
+      connect_timeout: 10

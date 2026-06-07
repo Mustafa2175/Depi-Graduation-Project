@@ -1,0 +1,65 @@
+[
+  {
+    "job_id": "b37cb463cbd4ac5b22e05fd8fcd69c97",
+    "title": "كول سنتر عربي (اتصالات مصر) (كاش, شركات, افراد)...",
+    "company": "اتصالات مصر",
+    "location": "السادس من اكتوبر، الجيزة",
+    "salary": "6300 - 7300 جنيه مصري",
+    "source": "forasna",
+    "scraped_at": "2026-06-07T03:28:22.699546",
+    "run_id": "20260607_032820"
+  },
+  {
+    "job_id": "918187a22a5e436ab4cb30f6c1bd35c3",
+    "title": "Senior it specialist-مسؤول اول دعم فني",
+    "company": "مجموعة شركات سامي عايد",
+    "location": "مدينة السادات، المنوفية",
+    "salary": "الراتب غير معلن",
+    "source": "forasna",
+    "scraped_at": "2026-06-07T03:28:22.701418",
+    "run_id": "20260607_032820"
+  },
+  {
+    "job_id": "6b5f070134a7d8fd39578167d3d1ebca",
+    "title": "مصمم جرافيك",
+    "company": "شركة ثروة التقني المحدودة",
+    "location": "الازبكية، البساتين، الخليفة، الدراسة، الدرب الاحمر، الزاوية الحمراء، الزيتون، السلام، السيدة زينب، الشروق، العتبة، المطرية، القاهرة",
+    "salary": "175 - 500 دولار امريكي",
+    "source": "forasna",
+    "scraped_at": "2026-06-07T03:28:22.703123",
+    "run_id": "20260607_032820"
+  },
+  {
+    "job_id": "622a80759f30f4e09b46f2fdec394fbc",
+    "title": "Software Developer",
+    "company": "eVision -",
+    "location": "New Cairo,Cairo,Egypt",
+    "salary": "N/A",
+    "job_url": "https://wuzzuf.net/jobs/p/a0uuhjgqs7bw-software-developer-evision-cairo-egypt",
+    "source": "wuzzuf",
+    "scraped_at": "2026-06-07T03:28:08.172188",
+    "run_id": "20260607_032807"
+  },
+  {
+    "job_id": "4e4f03532c92f50ebf1a122548a0cacc",
+    "title": "Software Developer Engineer",
+    "company": "Confidential -",
+    "location": "Cairo,Egypt",
+    "salary": "N/A",
+    "job_url": "https://wuzzuf.net/jobs/p/xck008vwljme-software-developer-engineer-cairo-egypt",
+    "source": "wuzzuf",
+    "scraped_at": "2026-06-07T03:28:08.172255",
+    "run_id": "20260607_032807"
+  },
+  {
+    "job_id": "4d6054dc1cf59160630503c4cfec151d",
+    "title": "Senior Software Developer (Full Stack, Lead)",
+    "company": "lanquez -",
+    "location": "New Cairo,Cairo,Egypt",
+    "salary": "N/A",
+    "job_url": "https://wuzzuf.net/jobs/p/g0w4kkgpbqak-senior-software-developer-full-stack-lead-vazlane-cairo-egypt",
+    "source": "wuzzuf",
+    "scraped_at": "2026-06-07T03:28:08.172296",
+    "run_id": "20260607_032807"
+  }
+]

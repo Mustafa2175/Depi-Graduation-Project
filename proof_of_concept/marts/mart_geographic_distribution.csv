@@ -1,0 +1,7 @@
+region,governorate,postings,cities,hiring_companies,avg_salary_mid,remote_postings,postings_share_pct
+Greater Cairo,Cairo,102,8,69,8897,3,67.55
+Greater Cairo,Giza,27,6,20,10650,0,17.88
+Coastal,Alexandria,10,2,8,,0,6.62
+Unknown,Egypt,10,1,8,,0,6.62
+Delta,Dakahlia,1,1,1,,0,0.66
+Delta,Sharqia,1,1,1,,0,0.66

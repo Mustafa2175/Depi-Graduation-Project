@@ -1,0 +1,19 @@
+.git
+.gitignore
+# Never bake local secrets/config into the image — the container gets its
+# env from docker-compose. A copied-in .env would override PGHOST=db.
+.env
+.env.*
+**/__pycache__
+*.py[cod]
+venv
+env
+.venv
+data
+dbt/**/target
+dbt/**/dbt_packages
+dbt/**/logs
+**/.DS_Store
+.vscode
+.idea
+*.pdf

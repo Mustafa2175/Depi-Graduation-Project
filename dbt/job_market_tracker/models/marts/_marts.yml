@@ -1,0 +1,155 @@
+version: 2
+
+models:
+  - name: mart_in_demand_roles
+    description: "Posting volume by job category, with salary context and a saturation proxy (postings per hiring company)."
+    columns:
+      - name: category_name
+        description: "Job category (the demand grain)."
+        data_tests: [unique, not_null]
+      - name: postings
+        description: "Number of unique postings in the category."
+        data_tests: [not_null]
+      - name: hiring_companies
+        description: "Distinct companies hiring for this category."
+      - name: avg_salary_mid
+        description: "Average salary mid-point for postings with a known salary."
+      - name: remote_postings
+        description: "Count of postings in the category flagged remote."
+      - name: demand_share_pct
+        description: "Category's share of all postings, as a percentage."
+      - name: postings_per_company
+        description: "Saturation proxy: postings divided by distinct hiring companies."
+      - name: demand_rank
+        description: "Rank by posting volume (1 = most in demand)."
+
+  - name: mart_salary_intelligence
+    description: "Salary min/avg/median/max by category x seniority x governorate (postings with a known salary only)."
+    columns:
+      - name: category_name
+        description: "Job category."
+        data_tests: [not_null]
+      - name: seniority
+        description: "Seniority bucket parsed from the title (Junior/Mid/Senior/Unspecified)."
+      - name: governorate
+        description: "Egyptian governorate."
+      - name: postings_with_salary
+        description: "Number of postings contributing to the salary aggregates."
+        data_tests: [not_null]
+      - name: salary_floor
+        description: "Minimum of the posted salary_min values."
+      - name: avg_salary_min
+        description: "Average of posted salary_min values."
+      - name: avg_salary_mid
+        description: "Average salary mid-point."
+      - name: avg_salary_max
+        description: "Average of posted salary_max values."
+      - name: salary_ceiling
+        description: "Maximum of the posted salary_max values."
+      - name: median_salary_mid
+        description: "Median salary mid-point (50th percentile)."
+      - name: currency
+        description: "Representative currency for the group (EGP/USD)."
+
+  - name: mart_skill_demand
+    description: "Most requested skills overall and per category."
+    columns:
+      - name: skill_name
+        description: "Canonical skill/technology name."
+        data_tests: [not_null]
+      - name: skill_category
+        description: "Skill grouping (e.g. language, framework, cloud)."
+      - name: category_name
+        description: "Job category the skill demand is sliced by."
+      - name: postings
+        description: "Distinct postings requesting this skill within the category."
+        data_tests: [not_null]
+      - name: total_postings
+        description: "Distinct postings requesting this skill across all categories."
+      - name: overall_skill_rank
+        description: "Rank by total demand (1 = most requested skill)."
+
+  - name: mart_company_insights
+    description: "Top hiring companies: volume, breadth and average pay."
+    columns:
+      - name: company_name
+        description: "Hiring company (current name)."
+        data_tests: [unique, not_null]
+      - name: postings
+        description: "Number of postings by the company."
+        data_tests: [not_null]
+      - name: distinct_categories
+        description: "How many job categories the company hires across."
+      - name: distinct_governorates
+        description: "How many governorates the company hires across."
+      - name: avg_salary_mid
+        description: "Average salary mid-point across the company's postings."
+      - name: remote_postings
+        description: "Count of the company's postings flagged remote."
+      - name: top_category
+        description: "The company's most common job category."
+      - name: top_governorate
+        description: "The company's most common governorate."
+      - name: hiring_rank
+        description: "Rank by posting volume (1 = most active hirer)."
+
+  - name: mart_geographic_distribution
+    description: "Job density by governorate / region across Egypt, with pay and remote mix."
+    columns:
+      - name: region
+        description: "Region the governorate belongs to."
+      - name: governorate
+        description: "Egyptian governorate (the density grain)."
+        data_tests: [unique, not_null]
+      - name: postings
+        description: "Number of postings in the governorate."
+        data_tests: [not_null]
+      - name: cities
+        description: "Distinct cities with postings in the governorate."
+      - name: hiring_companies
+        description: "Distinct companies hiring in the governorate."
+      - name: avg_salary_mid
+        description: "Average salary mid-point in the governorate."
+      - name: remote_postings
+        description: "Count of postings in the governorate flagged remote."
+      - name: postings_share_pct
+        description: "Governorate's share of all postings, as a percentage."
+
+  - name: mart_work_mode_breakdown
+    description: "Remote/hybrid/on-site and employment-type distribution (tall facet table)."
+    columns:
+      - name: facet
+        description: "Which dimension this row breaks down: 'work_mode' or 'employment_type'."
+        data_tests:
+          - accepted_values:
+              arguments:
+                values: ['work_mode', 'employment_type']
+      - name: value
+        description: "The facet value (e.g. remote / on-site / full-time)."
+        data_tests: [not_null]
+      - name: postings
+        description: "Number of postings with this facet value."
+      - name: share_pct
+        description: "Share of the facet's total, as a percentage."
+        data_tests: [not_null]
+
+  - name: mart_hiring_trends
+    description: "Monthly hiring activity by category over time (NULL posted dates excluded)."
+    columns:
+      - name: year
+        description: "Posting year."
+        data_tests: [not_null]
+      - name: month
+        description: "Posting month number (1-12)."
+        data_tests: [not_null]
+      - name: month_name
+        description: "Posting month name."
+      - name: category_name
+        description: "Job category."
+      - name: postings
+        description: "Number of postings in that month/category."
+        data_tests: [not_null]
+      - name: hiring_companies
+        description: "Distinct companies hiring that month/category."
+      - name: avg_salary_mid
+        description: "Average salary mid-point that month/category."

@@ -1,0 +1,4 @@
+category_name,seniority,governorate,postings_with_salary,salary_floor,avg_salary_min,avg_salary_mid,avg_salary_max,salary_ceiling,median_salary_mid,currency
+Other,Unspecified,Cairo,2,175,3088,4669,6250,12000,4669.0,EGP
+Other,Unspecified,Giza,2,6300,9650,10650,11650,16000,10650.0,EGP
+UI/UX Design,Unspecified,Cairo,2,8000,8750,13125,17500,25000,13125.0,EGP

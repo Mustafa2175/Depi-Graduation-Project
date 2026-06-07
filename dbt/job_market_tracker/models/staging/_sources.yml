@@ -1,0 +1,25 @@
+version: 2
+
+sources:
+  - name: warehouse
+    description: "Phase 4 PostgreSQL star schema (Gold layer), loaded by warehouse/load_to_postgres.py."
+    schema: public
+    tables:
+      - name: fact_job_postings
+        description: "One row per unique job posting (deduplicated by job_hash)."
+      - name: dim_company
+        description: "Company dimension (SCD Type 2)."
+      - name: dim_location
+        description: "City + governorate dimension."
+      - name: dim_skill
+        description: "Skill / technology dimension."
+      - name: dim_job_category
+        description: "Job category dimension."
+      - name: dim_date
+        description: "Calendar date dimension."
+      - name: dim_source
+        description: "Job board source dimension."
+      - name: bridge_job_skill
+        description: "Many-to-many bridge between postings and skills."
+      - name: ref_governorate
+        description: "Egyptian governorate reference (with region)."

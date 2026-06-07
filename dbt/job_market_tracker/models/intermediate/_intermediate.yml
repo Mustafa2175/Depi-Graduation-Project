@@ -1,0 +1,89 @@
+version: 2
+
+models:
+  - name: int_job_enriched
+    description: "One denormalized row per job posting — the fact joined to every dimension. The workhorse the marts build on."
+    columns:
+      - name: job_key
+        description: "Surrogate key of the posting (from fact_job_postings)."
+        data_tests: [unique, not_null]
+      - name: job_hash
+        description: "Deduplication business key (title+company+location fingerprint)."
+        data_tests: [not_null]
+      - name: title_clean
+        description: "Cleaned job title."
+      - name: seniority
+        description: "Seniority bucket parsed from the title (Junior/Mid/Senior/Unspecified)."
+      - name: category_name
+        description: "Job category."
+      - name: company_name
+        description: "Hiring company (current name)."
+      - name: city
+        description: "Normalized city."
+      - name: governorate
+        description: "Egyptian governorate."
+      - name: region
+        description: "Region the governorate belongs to."
+      - name: source_name
+        description: "Source board identifier (wuzzuf, bayt, ...)."
+      - name: source_display
+        description: "Human-friendly source name."
+      - name: salary_min
+        description: "Lower salary bound, if known."
+      - name: salary_max
+        description: "Upper salary bound, if known."
+      - name: salary_mid
+        description: "Salary mid-point derived in staging."
+      - name: salary_currency
+        description: "Salary currency (EGP/USD)."
+      - name: experience_years_min
+        description: "Minimum years of experience required, if stated."
+      - name: experience_years_max
+        description: "Maximum years of experience required, if stated."
+      - name: is_remote
+        description: "Whether the posting is remote."
+      - name: work_mode
+        description: "remote | hybrid | on-site."
+      - name: employment_type
+        description: "full-time | part-time | contract | internship | freelance."
+      - name: posted_date
+        description: "Date the job was posted."
+      - name: posted_year
+        description: "Year component of the posted date."
+      - name: posted_quarter
+        description: "Quarter component of the posted date."
+      - name: posted_month
+        description: "Month number of the posted date."
+      - name: posted_month_name
+        description: "Month name of the posted date."
+      - name: posted_week
+        description: "ISO week-of-year of the posted date."
+      - name: job_url
+        description: "Canonical URL of the posting."
+      - name: first_seen_at
+        description: "When the posting was first loaded into the warehouse."
+
+  - name: int_job_skills
+    description: "One row per (job, skill) — the skill bridge resolved to skill + job attributes, so skill demand can be sliced by category, location, etc."
+    columns:
+      - name: job_key
+        description: "Surrogate key of the posting."
+        data_tests: [not_null]
+      - name: skill_key
+        description: "Surrogate key of the skill."
+        data_tests: [not_null]
+      - name: skill_name
+        description: "Canonical skill/technology name."
+        data_tests: [not_null]
+      - name: skill_category
+        description: "Skill grouping (e.g. language, framework, cloud)."
+      - name: category_name
+        description: "Job category of the posting."
+      - name: governorate
+        description: "Governorate of the posting."
+      - name: region
+        description: "Region of the posting."
+      - name: seniority
+        description: "Seniority bucket of the posting."
+      - name: work_mode
+        description: "Work mode of the posting."

@@ -1,0 +1,13 @@
+# Optional heavy dependencies for the browser-based producers (Bayt, Jobzella)
+# and the jobspy-based Indeed producer. NOT required for the requests-based
+# producers (Wuzzuf, Forasna) or for processing -> warehouse -> dbt.
+#
+# These need a real Chrome/Chromium + chromedriver on the host. On Python 3.12+
+# `setuptools` is required because undetected-chromedriver imports the removed
+# stdlib `distutils`.
+#   uv pip install --python .venv/bin/python -r requirements-browser.txt
+selenium==4.44.0
+undetected-chromedriver==3.5.5
+webdriver-manager==4.1.2
+python-jobspy==1.1.82
+setuptools>=70

@@ -1,0 +1,38 @@
+# One command for any developer on any OS:  docker compose up --build
+# Brings up an identical PostgreSQL and runs the full pipeline + dbt against it.
+services:
+  db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: ${PGUSER:-jobmarket}
+      POSTGRES_PASSWORD: ${PGPASSWORD:-jobmarket}
+      POSTGRES_DB: ${PGDATABASE:-job_market_tracker}
+    ports:
+      - "${PGPORT:-5432}:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${PGUSER:-jobmarket} -d ${PGDATABASE:-job_market_tracker}"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+
+  app:
+    build: .
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      # Inside the compose network the database host is the service name 'db'.
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: ${PGUSER:-jobmarket}
+      PGPASSWORD: ${PGPASSWORD:-jobmarket}
+      PGDATABASE: ${PGDATABASE:-job_market_tracker}
+      DBT_PROFILES_DIR: /app/dbt/job_market_tracker
+    volumes:
+      # Persist generated data layers on the host for inspection.
+      - ./data:/app/data
+
+volumes:
+  pgdata:

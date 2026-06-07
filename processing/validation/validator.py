@@ -1,19 +1,12 @@
 import pandas as pd
 from datetime import datetime
-import os
 
 class DataValidator:
     REQUIRED_COLUMNS = [
-        'job_id', 'job_hash', 'title_clean', 'company_clean', 
-        'location_city', 'location_gov', 'source', 'job_url', 
+        'job_id', 'job_hash', 'title_clean', 'company_clean',
+        'location_city', 'location_gov', 'source', 'job_url',
         'scraped_at', 'posted_at', 'run_id'
     ]
-
-    @staticmethod
-    def check_schema(df: pd.DataFrame) -> list:
-        """Returns missing columns if any."""
-        missing = [col for col in DataValidator.REQUIRED_COLUMNS if col not in df.columns]
-        return missing
 
     @staticmethod
     def validate_row(row) -> list:

@@ -1,0 +1,5 @@
+# dbt and its PostgreSQL adapter. Kept separate from the app requirements
+# because dbt has its own dependency tree and (for local dev outside Docker)
+# is installed into a dedicated Python 3.12 virtualenv — see scripts/setup_local.sh.
+dbt-core==1.11.11
+dbt-postgres==1.10.0

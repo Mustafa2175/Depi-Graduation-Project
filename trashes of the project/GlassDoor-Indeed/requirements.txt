@@ -1,4 +1,0 @@
-python-jobspy
-pandas
-apache-airflow
-pytest
