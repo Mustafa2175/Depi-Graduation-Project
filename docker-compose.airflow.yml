@@ -1,0 +1,119 @@
+# Airflow orchestration layer — ADDITIVE override, does not replace or edit
+# your existing docker-compose.yml.
+#
+# Run with:
+#   docker compose -f docker-compose.yml -f docker-compose.airflow.yml up --build -d
+#
+# How this works:
+#   Airflow's webserver/scheduler run in their own lightweight image
+#   (airflow/Dockerfile). They never execute pipeline code directly. Instead,
+#   each DAG task uses DockerOperator to launch a short-lived container from
+#   your EXISTING `jobmarket-pipeline` image (built from your project's
+#   Dockerfile) to run one pipeline command, then removes itself. This means:
+#     - Zero dependency conflicts between Airflow and dbt/pandas/etc.
+#     - Zero code duplication — Airflow calls the exact same commands you
+#       already run manually (python -m producers.runner ..., dbt build, etc.)
+#     - Rebuilding your pipeline image after a code change is all you need;
+#       Airflow always launches whatever image tag is current.
+
+x-airflow-common: &airflow-common
+  build:
+    context: ./airflow
+  image: jmt-airflow:latest
+  environment: &airflow-common-env
+    AIRFLOW__CORE__EXECUTOR: LocalExecutor
+    AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db/airflow
+    AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+    AIRFLOW__API__AUTH_BACKENDS: airflow.api.auth.backend.basic_auth
+    AIRFLOW__CORE__DEFAULT_TIMEZONE: utc
+    # --- read by the DAG files themselves ---
+    PIPELINE_IMAGE: jobmarket-pipeline:latest
+    PIPELINE_NETWORK: pipeline_net
+    PGHOST: db
+    PGPORT: "5432"
+    PGUSER: ${PGUSER:-jobmarket}
+    PGPASSWORD: ${PGPASSWORD:-jobmarket}
+    PGDATABASE: ${PGDATABASE:-job_market_tracker}
+  volumes:
+    - ./airflow/dags:/opt/airflow/dags
+    - ./airflow/logs:/opt/airflow/logs
+    - ./airflow/plugins:/opt/airflow/plugins
+    # Lets Airflow's scheduler talk to the host Docker daemon to launch
+    # pipeline task containers (Option A: DockerOperator).
+    - /var/run/docker.sock:/var/run/docker.sock
+  networks:
+    - pipeline_net
+  depends_on:
+    airflow-db:
+      condition: service_healthy
+
+services:
+  # --- attach your existing services to the shared network + named volume ---
+  app:
+    image: jobmarket-pipeline:latest
+    volumes:
+      - pipeline_data:/app/data
+    networks:
+      - pipeline_net
+
+  db:
+    networks:
+      - pipeline_net
+
+  # --- Airflow's own metadata database (separate from your job-market db) ---
+  airflow-db:
+    image: postgres:16-alpine
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow_db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 12
+    networks:
+      - pipeline_net
+
+  airflow-init:
+    <<: *airflow-common
+    entrypoint: /bin/bash
+    command:
+      - -c
+      - |
+        airflow db migrate
+        airflow users create \
+          --username admin --password admin \
+          --firstname Admin --lastname User \
+          --role Admin --email admin@example.com || true
+    depends_on:
+      airflow-db:
+        condition: service_healthy
+
+  airflow-webserver:
+    <<: *airflow-common
+    command: webserver
+    ports:
+      - "8080:8080"
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+  airflow-scheduler:
+    <<: *airflow-common
+    command: scheduler
+    depends_on:
+      airflow-init:
+        condition: service_completed_successfully
+
+volumes:
+  pipeline_data:
+    name: pipeline_data
+  airflow_db_data:
+    name: airflow_db_data
+
+networks:
+  pipeline_net:
+    name: pipeline_net

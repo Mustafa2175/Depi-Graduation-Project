@@ -20,6 +20,7 @@ COPY requirements.txt dbt-requirements.txt ./
 RUN pip install -r requirements.txt -r dbt-requirements.txt
 
 COPY . .
+RUN sed -i 's/\r$//' scripts/*.sh
 RUN chmod +x scripts/*.sh
 
 # Default: wait for DB, build the warehouse, load data, run dbt.
