@@ -1,0 +1,45 @@
+# Additive overlay — adds the FastAPI backend and React frontend services.
+# Usage:
+#   docker compose -f docker-compose.yml -f docker-compose.app.yml up --build -d
+#
+# This follows the same pattern as docker-compose.airflow.yml:
+# it ONLY adds new services; nothing in docker-compose.yml is modified.
+
+services:
+  api:
+    build:
+      context: ./api
+    image: jobmarket-api:latest
+    ports:
+      - "8000:8000"
+    environment:
+      # Inside the compose network the database host is the service name 'db'.
+      PGHOST: db
+      PGPORT: 5432
+      PGUSER: ${PGUSER:-jobmarket}
+      PGPASSWORD: ${PGPASSWORD:-jobmarket}
+      PGDATABASE: ${PGDATABASE:-job_market_tracker}
+    depends_on:
+      db:
+        condition: service_healthy
+    networks:
+      - pipeline_net
+    restart: unless-stopped
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    image: jobmarket-frontend:latest
+    ports:
+      - "3000:80"
+    depends_on:
+      - api
+    networks:
+      - pipeline_net
+    restart: unless-stopped
+
+networks:
+  pipeline_net:
+    name: pipeline_net
+    external: true
