@@ -16,6 +16,8 @@ services:
       interval: 5s
       timeout: 5s
       retries: 12
+    networks:
+      - pipeline_net
 
   app:
     build: .
@@ -33,6 +35,12 @@ services:
     volumes:
       # Persist generated data layers on the host for inspection.
       - ./data:/app/data
+    networks:
+      - pipeline_net
 
 volumes:
   pgdata:
+
+networks:
+  pipeline_net:
+    name: pipeline_net

@@ -3,7 +3,7 @@
  * Points at the FastAPI backend on port 8000.
  */
 
-const API_BASE = 'http://localhost:8000/api';
+const API_BASE = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
 
 export async function fetchApi(endpoint, params = {}) {
   const url = new URL(`${API_BASE}/${endpoint}`);

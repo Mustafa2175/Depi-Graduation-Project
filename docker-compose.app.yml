@@ -38,8 +38,3 @@ services:
     networks:
       - pipeline_net
     restart: unless-stopped
-
-networks:
-  pipeline_net:
-    name: pipeline_net
-    external: true
